@@ -1,0 +1,24 @@
+Sub sentence_Breaker():
+    'declare variables
+    Dim Wordsarray() As String
+    Dim Sentence As String
+    Sentence = Range("B1").Value
+
+    'Split with Space as delimiter
+    Wordsarray = Split(Sentence, " ")
+
+    'Print requested words
+    reqwordnum1 = Range("A4").Value
+    reqwordnum2 = Range("A5").Value
+    reqwordnum3 = Range("A6").Value
+    Range("B4").Value = Wordsarray(reqwordnum1)
+    Range("B5").Value = Wordsarray(reqwordnum2)
+    Range("B6").Value = Wordsarray(reqwordnum3)
+End Sub
+
+Sub Clearcells()
+    Range("B4:B6").Select
+    Selection.ClearContents
+End Sub
+
+

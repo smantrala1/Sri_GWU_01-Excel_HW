@@ -1,0 +1,169 @@
+
+Sub tickertest()
+'create summary table
+'declare variables
+Dim summaryrow As Long
+Dim openrow As Long
+Dim i As Long
+Dim yearlychange As Double
+Dim totalstockvolume As LongLong
+Dim rowcount As Long
+Dim currentticker As String
+Dim nextticker As String
+Dim openvalue As Double
+Dim closevalue As Double
+'Create summary table headers
+Range("I1:L1").Merge
+Range("I1:L2").Font.Bold = True
+Range("I1").HorizontalAlignment = xlCenter
+Range("I1").Value = "Summary Table"
+Range("I2").Value = "Ticker"
+Range("J2").Value = "Yearly Change"
+Range("K2").Value = "Percent change"
+Range("L2").Value = "Total Stock Volume"
+
+'initialize variables
+totalstockvolume = 0
+'start of result row
+summaryrow = 3
+'start of the openvalue row
+openrow = 2
+
+'no of rows in the column A
+rowcount = (Range("A1").End(xlDown).row)
+
+For i = openrow To rowcount
+    currentticker = Cells(i, 1).Value
+    nextticker = Cells(i + 1, 1).Value
+    openvalue = Cells(openrow, 3).Value
+    If currentticker = nextticker Then
+        'keep adding total stock volume
+        totalstockvolume = totalstockvolume + Cells(i, 7).Value
+    Else
+        closevalue = Cells(i, 6).Value
+        'summary row values
+        '1.ticker
+        Cells(summaryrow, 9).Value = currentticker
+        'yearlychange
+        yearlychange = closevalue - openvalue
+        If yearlychange < 0 Then
+            Cells(summaryrow, 10).Interior.ColorIndex = 3
+            Cells(summaryrow, 10).Value = yearlychange
+        Else
+            Cells(summaryrow, 10).Interior.ColorIndex = 4
+            Cells(summaryrow, 10).Value = yearlychange
+        End If
+        
+        '3. percentage change
+        Cells(summaryrow, 11).NumberFormat = "0.00%"
+        If yearlychange = 0 Or openvalue = 0 Then
+            Cells(summaryrow, 11).Value = 0
+        Else
+            Cells(summaryrow, 11).Value = yearlychange / openvalue
+        End If
+        '4. totalstockvolume
+        Cells(summaryrow, 12).Value = totalstockvolume + Cells(i, 7).Value
+        
+        'update start value to use the next row
+        openrow = i + 1
+        'move on to next row of summary table
+        summaryrow = summaryrow + 1
+        'reset stockvolume to 0
+        totalstockvolume = 0
+    End If
+Next i
+
+End Sub
+
+Sub bonus()
+Dim i As Integer
+Dim j As Integer
+Dim k As Integer
+Dim rowcount As Integer
+Dim rowvalue As Integer
+Dim maxincreasevalue As Double
+Dim maxdecreasevalue As Double
+Dim maxvolume As LongLong
+
+'Create summary table headers
+Range("N1:P1").Merge
+Range("N1:P2").Font.Bold = True
+Range("N1").HorizontalAlignment = xlCenter
+Range("N1").Value = "Bonus Summary"
+Range("N3").Value = "Greatest % Increase"
+Range("N4").Value = "Greatest % Decrease"
+Range("N5").Value = "Greatest Total Volume"
+Range("O2").Value = "Ticker"
+Range("P2").Value = "Value"
+rowcount = (Range("I1").End(xlDown).row)
+
+'Greatest % increase
+maxincreasevalue = 0
+For i = 3 To rowcount
+    If Cells(i, 11).Value > maxincreasevalue Then
+
+        maxincreasevalue = Cells(i, 11).Value
+End If
+Next i
+    Range("P3").NumberFormat = "0.00%"
+ Range("P3").Value = maxincreasevalue
+
+For i = 3 To rowcount
+    If Cells(i, 11).Value = maxincreasevalue Then
+    rowvalue = i
+    i = rowcount
+    End If
+Next i
+
+Range("O3").Value = Cells(rowvalue, 9).Value
+
+
+'Greatest % decrease
+maxdecreasevalue = 0
+For j = 3 To rowcount
+    If Cells(j, 11).Value < maxdecreasevalue Then
+
+        maxdecreasevalue = Cells(j, 11).Value
+End If
+Next j
+    Range("P4").NumberFormat = "0.00%"
+ Range("P4").Value = maxdecreasevalue
+
+For j = 3 To rowcount
+    If Cells(j, 11).Value = maxdecreasevalue Then
+    rowvalue = j
+    j = rowcount
+    End If
+Next j
+
+Range("O4").Value = Cells(rowvalue, 9).Value
+'MsgBox (maxvalue)
+
+
+'Greatest % decrease
+maxvolume = 0
+For k = 3 To rowcount
+    If Cells(k, 12).Value > maxvolume Then
+
+        maxvolume = Cells(k, 12).Value
+End If
+Next k
+    'Range("P4").NumberFormat = "0.00%"
+ Range("P5").Value = maxvolume
+
+For k = 3 To rowcount
+    If Cells(k, 12).Value = maxvolume Then
+    rowvalue = k
+    k = rowcount
+    End If
+Next k
+
+Range("O5").Value = Cells(rowvalue, 9).Value
+'MsgBox (maxvalue)
+End Sub
+
+Sub Clearcells()
+    Range("I:P").Select
+    Selection.ClearContents
+     Selection.Interior.Color = xlNone
+End Sub

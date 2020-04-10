@@ -1,0 +1,40 @@
+Sub hornets_count()
+Dim i As Integer
+Dim j As Integer
+Dim hcount As Integer
+Dim val As String
+Dim bees As Integer
+Dim bugs As Integer
+Dim remaining As Integer
+bees = Range("J2").Value
+bugs = Range("L2").Value
+bugsbees = bees + bugs
+'Part I: Count the number of Hornets found
+'and display the number to your user in the form of a message box.
+hcount = 0
+For i = 1 To 6
+    For j = 1 To 7
+      val = Cells(i, j).Value
+      If val = "Hornets" Then
+        hcount = hcount + 1
+        
+            If bugs > 0 Then
+               Cells(i, j).Value = "Bugs"
+               bugs = bugs - 1
+               Range("L2").Value = bugs
+            ElseIf bees > 0 Then
+               Cells(i, j).Value = "Bees"
+               bees = bees - 1
+               Range("J2").Value = bees
+            End If
+      End If
+    Next j
+Next i
+
+If (hcount > bugsbees) Then
+MsgBox ("Oh no we still have hornets")
+End If
+MsgBox ("The number of Hornets is " & hcount)
+
+
+End Sub
