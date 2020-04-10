@@ -1,0 +1,15 @@
+Sub Begin_Your_Journey()
+Dim userselection As Integer
+userselection = Range("B1").Value
+    If userselection = 1 Then
+       MsgBox ("You choose to enter the wooded forest of doom!")
+    ElseIf userselection = 2 Then
+        MsgBox ("You choose to enter the fiery volcano of doom!")
+    ElseIf userselection = 3 Then
+        MsgBox ("You choose to enter the terrifying jungle of doom!")
+    ElseIf userselection = 4 Then
+        MsgBox ("You choose to enter custom jungle of doom!")
+    Else
+        MsgBox ("Try following directions")
+    End If
+End Sub
